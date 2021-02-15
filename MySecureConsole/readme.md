@@ -15,7 +15,7 @@ This console-project is based on the information on these websites:
 1. Code Examples auf Git-hub (download) ,See Call "Own Api" - Example
    https://github.com/Azure-Samples/active-directory-dotnetcore-daemon-v2/archive/master.zip
 
-## Projekt Setup
+## Project Setup
 
 dotnet new console
 
