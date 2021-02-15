@@ -1,4 +1,4 @@
-## Core Concepts
+## Core Concepts
 
 This api-project is based on the information on these websites:
 

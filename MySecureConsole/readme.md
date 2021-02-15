@@ -1,4 +1,4 @@
-## Concepts
+## Concepts
 
 This console-project is based on the information on these websites:
 
@@ -15,16 +15,24 @@ This console-project is based on the information on these websites:
 1. Code Examples auf Git-hub (download) ,See Call "Own Api" - Example
    https://github.com/Azure-Samples/active-directory-dotnetcore-daemon-v2/archive/master.zip
 
-## Projekt Setup
+## Project Setup
 
 dotnet new console
+
 dotnet add package Microsoft.Extensions.Configuration
+
 dotnet add package Microsoft.Extensions.Configuration.Binder
+
 dotnet add package Microsoft.Extensions.Configuration.Json
+
 dotnet add package Microsoft.Identity.Client
+
 dotnet add package Newtonsoft.Json
 
 touch readme.md
+
 touch appsettings.json
+
 touch AuthenticationConfig.cs
+
 touch ProtectedApiCallHelper.cs
