@@ -42,6 +42,7 @@ namespace MySecureApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MySecureApi v1"));
             }
 
+            // use Cors to get your service callable from any SPA origin.
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseHttpsRedirection();
