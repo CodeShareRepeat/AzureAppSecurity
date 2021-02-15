@@ -1,4 +1,4 @@
-## Concepts
+## Concepts
 
 This console-project is based on the information on these websites:
 
@@ -18,13 +18,21 @@ This console-project is based on the information on these websites:
 ## Projekt Setup
 
 dotnet new console
+
 dotnet add package Microsoft.Extensions.Configuration
+
 dotnet add package Microsoft.Extensions.Configuration.Binder
+
 dotnet add package Microsoft.Extensions.Configuration.Json
+
 dotnet add package Microsoft.Identity.Client
+
 dotnet add package Newtonsoft.Json
 
 touch readme.md
+
 touch appsettings.json
+
 touch AuthenticationConfig.cs
+
 touch ProtectedApiCallHelper.cs
