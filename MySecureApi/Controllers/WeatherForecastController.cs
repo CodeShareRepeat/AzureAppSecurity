@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,7 +14,7 @@ namespace MySecureApi.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Kalt", "Super Kalt", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
@@ -32,29 +31,51 @@ namespace MySecureApi.Controllers
             // this method is only accessible whith the given scope granted to the calling user / app
             // in this exapmple this is used for user access
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(1, 2).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                TemperatureC = 25,
+                Summary = "GetByScope!"
             })
             .ToArray();
         }
 
         [Authorize(Roles = "console.read")]
-        [HttpGet("GetDataByRole")]
+        [HttpGet("GetDataByConsoleRole")]
         public IEnumerable<WeatherForecast> GetByRole()
         {
             // this method is only accessible whith the given role (used for app access)
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(1, 2).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                TemperatureC = 0,
+                Summary = "GetByConsoleRole!"
             })
             .ToArray();
         }
+
+        [Authorize(Roles = "user.read,user.write")]
+        [HttpGet("GetDataByUserRole")]
+        public IEnumerable<WeatherForecast> GetByUserRole()
+        {
+            // this method is only accessible whith the given role (used for app access)
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = -100,
+                Summary = "GetByUserRole!"
+            })
+            .ToArray();
+        }
+
+
+
+
+
+
+
+
 
     }
 }
