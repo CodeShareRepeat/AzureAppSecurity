@@ -3,11 +3,11 @@ import { LogLevel } from "@azure/msal-browser";
 export const msalConfig = {
     auth: {
         // azure client registration id of this app
-        clientId: "REGISTERED-APP-GUID",
+        clientId: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX ",
         // url of the azure active directory tenant
-        authority: "https://login.microsoftonline.com/AAD-TENANT-ID",
+        authority: "https://login.microsoftonline.com/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX ",
         //if authorization was successfull, where to redirect
-        redirectUri: "http://localhost:3000/"
+        redirectUri: "http://YOUR-APP-URL"
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
@@ -38,12 +38,12 @@ export const msalConfig = {
     }
 };
 
-// this is the scope of the target api, not the web app
-// this is the request for the access token send to the /authorize endpoin
+// Add scopes here for ID token to be used at Microsoft identity platform endpoints.
+// This is the Scope for the Api, Not the webapp
 export const accessRequest = {
-    scopes: ["api://TARGATAPIGUID/Data.GetAll"]
+    scopes: ["api://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/SCOPE"]
 };
 
 export const apiEndpoints = {
-    myApi_GetWeatherForecast: "https://YOURAPINAME.azurewebsites.net/WeatherForecast/GetDataByScope"
+    myApi_GetDataByUserRole: "https://YOUR-TARGET-API/METHOD"
 };

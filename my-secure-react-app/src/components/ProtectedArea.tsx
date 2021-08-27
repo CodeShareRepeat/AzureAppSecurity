@@ -1,10 +1,11 @@
 import { useAccount, useMsal } from "@azure/msal-react";
-import React, { useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { useEffect } from "react";
+import { useState } from "react";
+import { Button, Col, Row } from "react-bootstrap";
 import { callApi } from "../api/apiCaller";
-import { accessRequest } from "../api/apiConfigs";
+import { accessRequest } from "../api/authConfigs";
 import AccessTokenViewer from "./AccessTokenViewer";
-import ApiResultViewer from "./ApiResultView";
+import ApiResultViewer from "./ApiResultViewer";
 import IdTokenViewer from "./IdTokenViewer";
 
 type componentStateType = {
@@ -19,11 +20,13 @@ export default function ProtectedArea() {
     accessTokenRaw: "",
     apiError: "",
   });
+
   const { instance, accounts } = useMsal();
 
   const accountForRequest = useAccount(accounts[0] || {});
 
-  function onCallApibuttonClick() {
+  useEffect(() => {
+    // Get the AccessToken (Raw)
     if (accountForRequest) {
       instance
         .acquireTokenSilent({
@@ -37,33 +40,37 @@ export default function ProtectedArea() {
               accessTokenRaw: JSON.stringify(authResponse.accessToken),
             };
           });
-
-          callApi(authResponse)
-            .then((apiResponse) => {
-              setComponentState((prevState: componentStateType) => {
-                return {
-                  ...prevState,
-                  error: "",
-                  apiData: apiResponse,
-                };
-              });
-            })
-            .catch((error) => {
-              setComponentState((prevState: componentStateType) => {
-                return {
-                  ...prevState,
-                  apiData: "",
-                  apiError: error.message,
-                };
-              });
-            });
         })
         .catch((error) => {
           setComponentState((prevState: componentStateType) => {
             return {
               ...prevState,
-              apiError: error,
+              apiError: "Error while reciving the access token. " + error,
               apiData: "",
+            };
+          });
+        });
+    }
+  }, []);
+
+  function onCallApibuttonClick() {
+    if (accountForRequest) {
+      callApi(componentState.accessTokenRaw)
+        .then((apiResponse) => {
+          setComponentState((prevState: componentStateType) => {
+            return {
+              ...prevState,
+              error: "",
+              apiData: apiResponse,
+            };
+          });
+        })
+        .catch((error) => {
+          setComponentState((prevState: componentStateType) => {
+            return {
+              ...prevState,
+              apiData: "",
+              apiError: error.message,
             };
           });
         });
@@ -73,28 +80,28 @@ export default function ProtectedArea() {
   return (
     <>
       <p></p>
-      <Container fluid="lg">
-        <Row>
-          <Col sm>
-            <IdTokenViewer idToken={accounts} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm>
-            <AccessTokenViewer accessTokenRaw={componentState.accessTokenRaw} />
-          </Col>
-        </Row>
 
-        <Row>
-          <Col sm>
-            <Button onClick={onCallApibuttonClick}>Call Api</Button>
-            <ApiResultViewer
-              result={componentState.apiData}
-              error={componentState.apiError}
-            />
-          </Col>
-        </Row>
-      </Container>
+      <Row className="justify-content-md-center">
+        <Col sm>
+          <Button onClick={onCallApibuttonClick}>Call Api</Button>
+          <ApiResultViewer
+            result={componentState.apiData}
+            error={componentState.apiError}
+          />
+        </Col>
+      </Row>
+      <p />
+      <Row>
+        <Col sm>
+          <IdTokenViewer idToken={accounts} />
+        </Col>
+      </Row>
+      <p />
+      <Row>
+        <Col sm>
+          <AccessTokenViewer accessTokenRaw={componentState.accessTokenRaw} />
+        </Col>
+      </Row>
     </>
   );
 }

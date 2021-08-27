@@ -1,8 +1,8 @@
-import React from "react";
 import { Card } from "react-bootstrap";
 interface Props {
   accessTokenRaw: string;
 }
+
 export default function AccessTokenViewer(props: Props) {
   return (
     <>
