@@ -12,7 +12,7 @@ export async function callApi(accessToken: string) {
 
     const headers = new Headers();
     const bearer = `Bearer ${accessToken}`;
-
+    debugger;
     headers.append("Authorization", bearer);
 
     const options = {
@@ -23,8 +23,6 @@ export async function callApi(accessToken: string) {
     return fetch(apiEndpoints.myApi_GetDataByUserRole, options)
         .then(response => 
             {
-                // alert(apiEndpoints.myApi_GetWeatherForecast);
-                // alert(response); 
                 return response.json();
         });
        

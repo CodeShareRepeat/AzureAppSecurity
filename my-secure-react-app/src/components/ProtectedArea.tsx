@@ -1,10 +1,11 @@
 import { useAccount, useMsal } from "@azure/msal-react";
+import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { callApi } from "../api/apiCaller";
 import { accessRequest } from "../api/authConfigs";
-import AccessTokenViewer from "./AccessTokenViewer";
+import TokenViewer from "./TokenViewer";
 import ApiResultViewer from "./ApiResultViewer";
 import IdTokenViewer from "./IdTokenViewer";
 
@@ -21,23 +22,23 @@ export default function ProtectedArea() {
     apiError: "",
   });
 
-  const { instance, accounts } = useMsal();
-
-  const accountForRequest = useAccount(accounts[0] || {});
+  const { instance, accounts, inProgress } = useMsal();
+  const account  = useAccount(accounts[0] || {});
 
   useEffect(() => {
-    // Get the AccessToken (Raw)
-    if (accountForRequest) {
+
+    
+    if (account) {
       instance
         .acquireTokenSilent({
           ...accessRequest,
-          account: accountForRequest,
+          account: account,
         })
         .then((authResponse) => {
           setComponentState((prevState: componentStateType) => {
             return {
               ...prevState,
-              accessTokenRaw: JSON.stringify(authResponse.accessToken),
+              accessTokenRaw: authResponse.accessToken,
             };
           });
         })
@@ -51,10 +52,13 @@ export default function ProtectedArea() {
           });
         });
     }
-  }, []);
+  }, [account, instance]);
 
   function onCallApibuttonClick() {
-    if (accountForRequest) {
+    
+    if (account && componentState.accessTokenRaw != null) {
+      alert(componentState.accessTokenRaw);
+      
       callApi(componentState.accessTokenRaw)
         .then((apiResponse) => {
           setComponentState((prevState: componentStateType) => {
@@ -78,8 +82,8 @@ export default function ProtectedArea() {
   }
 
   return (
-    <>
-      <p></p>
+    <React.Fragment>
+
 
       <Row className="justify-content-md-center">
         <Col sm>
@@ -93,15 +97,17 @@ export default function ProtectedArea() {
       <p />
       <Row>
         <Col sm>
-          <IdTokenViewer idToken={accounts} />
+          
+          <TokenViewer token={JSON.stringify(accounts[0], null, 2)} title="This is your ID-TOKEN"/>
+
         </Col>
       </Row>
       <p />
       <Row>
         <Col sm>
-          <AccessTokenViewer accessTokenRaw={componentState.accessTokenRaw} />
+          <TokenViewer token={componentState.accessTokenRaw} title="This ist your ACCESS-Token." />
         </Col>
       </Row>
-    </>
+    </React.Fragment>
   );
 }

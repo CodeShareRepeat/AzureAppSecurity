@@ -3,6 +3,7 @@ import {
   UnauthenticatedTemplate,
   useMsal,
 } from "@azure/msal-react";
+import React from "react";
 import { Button, Card, Container, Row } from "react-bootstrap";
 import ProtectedArea from "./ProtectedArea";
 
@@ -10,8 +11,9 @@ export default function LoginLogout() {
   const { instance } = useMsal();
 
   return (
-    <>
-      <AuthenticatedTemplate>
+      <React.Fragment>
+        
+        <AuthenticatedTemplate>
         <Container fluid="lg">
           <p></p>
           <Row className="justify-content-md-left">
@@ -20,10 +22,9 @@ export default function LoginLogout() {
               sign out
             </Button>
           </Row>
-
           <ProtectedArea />
         </Container>
-      </AuthenticatedTemplate>
+        </AuthenticatedTemplate>
 
       <UnauthenticatedTemplate>
         <p />
@@ -47,8 +48,11 @@ export default function LoginLogout() {
               </Card.Body>
             </Card>
           </Row>
+      
         </Container>
+      
       </UnauthenticatedTemplate>
-    </>
+      
+      </React.Fragment>
   );
 }
